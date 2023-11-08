@@ -1,0 +1,775 @@
+% \iffalse meta-comment
+% ==========================================================================
+% locallabel.dtx
+% Copyright (c) Markus Kohm, 2023
+%
+% This work may be distributed and/or modified under the conditions of
+% the LaTeX Project Public License, version 1.3c of the license.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3c or later is part of all distributions of LaTeX
+% version 2005/12/01 or later and of this work.
+%
+% This work has the LPPL maintenance status "author-maintained".
+%
+% The Current Maintainer and author of this work is Markus Kohm.
+%
+% This work consists of the files listed in `MANIFEST.md'.
+% ==========================================================================
+%%
+%<@@=locallabel>
+%<+sty|drv>\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+%<*drv|dtx>
+\def\ProvidesNotExplFile#1#2#3#4{%
+  \ProvidesExplFile{#1}{#2}{#3}{#4}\ExplSyntaxOff
+}
+%</drv|dtx>
+%<*ins>
+\expandafter\ifx\csname ProvidesFile\endcsname\relax
+  \def\ProvidesFile#1[#2]{}
+  \def\ProvidesExplFile#1#2#3#4{}
+  \def\ProvidesNotExplFile#1#2#3#4{}
+\fi
+%</ins>
+%<*dtx>
+\ProvidesNotExplFile{locallabel.dtx}
+%</dtx>
+%<+drv>\ProvidesNotExplFile{locallabel.drv}
+%<+sty>\ProvidesExplPackage{locallabel}
+%<+ins>\ProvidesNotExplFile{locallabel.ins}
+{2023-11-07}{0.1}{local label support}
+%<*dtx>
+\ifx\documentclass\undefined
+%</dtx>
+%<*ins>
+  \input docstrip.tex
+  \ifToplevel{\keepsilent\askforoverwritefalse}
+  \generate{%
+%    \file{locallabel.drv}{%
+%      \from{locallabel.dtx}{drv}%
+%    }
+%    \file{locallabel.ins}{%
+%      \from{locallabel.dtx}{ins}%
+%    }
+    \file{locallabel.sty}{%
+      \from{locallabel.dtx}{sty,trace}%
+    }%
+  }
+%</ins>
+%<*dtx>
+\else
+  \let\endbatchfile\relax
+\fi
+%</dtx>
+%<*dtx|ins>
+\endbatchfile
+%</dtx|ins>
+%<*drv>
+\makeatletter
+\declare@file@substitution{article.cls}{scrartcl.cls}  
+\makeatother
+\AddToHook{package/hyperref/before}
+  {\RequirePackage[ngerman,english]{babel}}
+\documentclass[show-notes]{l3doc}
+\usepackage{csquotes}
+\usepackage[style=alphabetic]{biblatex}
+\usepackage{locallabel}
+\AfterCalculatingTypearea{%
+  \advance\marginparwidth by .5\dimexpr \oddsidemargin+1in\relax
+  \advance\oddsidemargin by  .5\dimexpr \oddsidemargin+1in\relax
+}
+\recalctypearea
+\hypersetup{%
+  pdfauthor = Markus Kohm,
+  pdftitle  = The LaTeX Package Documentation Package “locallabel”
+}
+\makeatletter
+\NewDocumentCommand{\LanguageMarker}{omO{0pt}m}{%
+  \hspace*{\fill}\nobreak
+  \raisebox{#3}[\ht\strutbox][\dp\strutbox]{%
+    \normalsize\normalfont
+    \IfValueTF{#1}
+      {\hyperref[{\LocalLabelGet[#1]{#2}}]}
+      {\hyperref[#2]}
+      {\textrightarrow\ #4}%
+  }%
+}
+\NewExpandableDocumentCommand{\IgnoredLanguageMarker}{omom}{}
+\BeforeStartingTOC[toc]{%
+  \RenewCommandCopy\LanguageMarker\IgnoredLanguageMarker
+}
+\pdfstringdefDisableCommands{%
+  \RenewCommandCopy\LanguageMarker\IgnoredLanguageMarker
+}
+\makeatother
+\NewDocumentEnvironment{interfacenote}{}{%
+  \begin{center}
+    \small
+    \begin{tabular}{@{}p{\dimexpr\linewidth-4em\relax}@{}}
+      \toprule
+      \textbf{\InterfaceNoteName:}
+}{%
+      \tabularnewline
+      \bottomrule
+    \end{tabular}
+  \end{center}
+}
+\newcaptionname{english}{\InterfaceNoteName}{Interface note}
+\newcaptionname{ngerman}{\InterfaceNoteName}{Hinweis}
+\begin{document}
+\DocInput{locallabel.dtx}
+\end{document}
+%</drv>
+% \fi^^A meta-comment
+%
+% \changes{0.0}{2023/11/07}{start of new package}
+% \changes{0.1}{2023/11/07}{first version with working implementation}
+%
+% \GetFileInfo{locallabel.dtx}
+%
+% \LocalLabelInit
+% \title{%
+%   \phantomsection^^A
+%   \addxcontentsline{toc}{part}{The \pkg{locallabel} Package}^^A
+%   \label{title}^^A
+%   Label Sections Using the \pkg{locallabel} Package
+% }
+% \author{\href{mailto:komascript@gmx.info}{Markus Kohm}}
+% \date{Version \fileversion{} \filedate{}\thanks{Code and issue tracker can
+%   be found at \url{https://github.com/komascript/locallabel}.}}
+% \maketitle
+% \begin{abstract}
+%   The \pkg{locallabel} package is a \LaTeX3 package with \LaTeXe{} user
+%   interface to define sections of labels, which have the same logical
+%   name. Cross-references within the section are automatically
+%   prioritized. Cross-references outside all sections are used as
+%   fallbacks. Cross-references to other sections are also possible.
+%
+%   This package is a generalization of the \KOMAScript{} Source Documentation
+%   Class feature of using local labels for, e.g., chapter, sections or
+%   languages.
+% \end{abstract}
+% \LanguageMarker[de]{title}{Deutsch}
+% \tableofcontents
+%
+% \begin{documentation}
+%
+% \section[The \LaTeX3 Interface]
+%   {The \LaTeX3 Interface \LanguageMarker[de]{sec:latex3}{Deutsch}}
+% \label{sec:latex3}
+%
+% The \pkg{locallabel} package is implemented with \LaTeX3 and has a native
+% \LaTeX3 interface, which is primarily intended for use by class and package
+% authors. However, it requires at least \LaTeX{} 2020-10-01.
+%
+% Users who have no knowledge of \LaTeX3 or are uninterested in its interface
+% can proceed directly to ``\nameref{sec:latex2e}'' in \autoref{sec:latex2e}
+% on \autopageref{sec:latex2e}.
+%
+% \begin{function}{\locallabel_init:,\locallabel_init:n}
+%   \begin{syntax}
+%     \cs{locallabel_init:}
+%     \cs{locallabel_init:n} \meta{clist}
+%   \end{syntax}
+%   This function does a new initialization of the local label stack. The
+%   \meta{clist} is a list of options. Currently supported option is:
+%   \begin{description}
+%   \item[\texttt{push=\meta{string}}:] already push \meta{string} to the
+%     label stack.
+%   \end{description}
+%   An empty label stack means, that we are in a kind of fallback or main
+%   label section, that is referenced whenever no local label is available.
+% \end{function}
+%
+% \begin{function}{\locallabel_push:n}
+%   \begin{syntax}
+%     \cs{locallabel_push:n} \meta{string}
+%   \end{syntax}
+%   Start a new label section \meta{string}.
+% \end{function}
+%
+% \begin{function}{\locallabel_pop:,\locallabel_pop:N}
+%   \begin{syntax}
+%     \cs{locallabel_pop:}
+%     \cs{locallabel_pop:N} \meta{string}
+%   \end{syntax}
+%   Stop the current label section. \cs{locallabel_pop:N} also stores the
+%   removed label section in the string variable \meta{string}.
+% \end{function}
+% 
+% \begin{function}
+%   {
+%     \locallabel_get_label:,
+%     \locallabel_get_label:n,\locallabel_get_label:nn,
+%   }
+%   \begin{syntax}
+%     \cs{locallabel_get_label:n} \meta{string_1}
+%     \cs{locallabel_get_label:n} \meta{string_2} \meta{string_1}
+%   \end{syntax}
+%   Get the full label name of label \meta{string_1} in the
+%   given label section \meta{string_2}. The functions
+%   \cs{locallabel_get_label:n} and \cs{locallabel_get_label:} use
+%   the current label section is tried. Function
+%   \cs{locallabel_get_label:} expands to the current label prefix.
+% \end{function}
+%
+% \section[The \LaTeXe{} Interface]
+%   {The \LaTeXe{} Interface \LanguageMarker[de]{sec:latex2e}{Deutsch}}
+% \label{sec:latex2e}
+%
+% In addition to the \LaTeX3 interface documented in \autoref{sec:latex3} on
+% \autopageref{sec:latex3}, there is also a \LaTeXe{} interface for regular
+% users and for use within the document. Typically, commands are mapped to
+% corresponding \LaTeX3 functions.
+%
+% \begin{function}{\LocalLabelInit}
+%   \begin{syntax}
+%     \tn{LocalLabelInit} \oarg{options}
+%   \end{syntax}
+%   The command resets the label system. The optional argument is a list of
+%   settings separated by commas. The currently supported setting:
+%   \begin{description}
+%     \item[\texttt{push=\meta{identifier}}:] initiate a new label section
+%     \meta{identifier} immediately according to
+%     \tn{LocalLabelStart}\Arg{identifier}. 
+%   \end{description}
+%   Reinitializing the label system within a label section is
+%   allowed. However, it is not recommended. Instead, active label sections
+%   should be ended first with \tn{LocalLabelStop}.
+%   \begin{interfacenote}
+%     The instruction is internally set to \cs{locallabel_init:} (without
+%     optional argument) or \cs{locallabel_init:n} (with optional argument).
+%   \end{interfacenote}
+% \end{function}
+%
+% \begin{function}{\LocalLabelStart,\LocalLabelStop}
+%   \begin{syntax}
+%     \tn{LocalLabelStart} \Arg{identifier}
+%     $\vdots$
+%     \tn{LocalLabelStop}
+%   \end{syntax}
+%   Start and end the label section \meta{identifier}. The commands are
+%   global, meaning a label section that begins in a group or environment does
+%   not automatically end with the group or environment. It is also possible
+%   to end a label section within a group or environment that was started
+%   before said group or environment.
+%   \begin{interfacenote}
+%     These are the \LaTeX3 functions \cs{locallabel_push:n} and
+%     \cs{locallabel_pop:}.
+%   \end{interfacenote}
+% \end{function}
+%
+% \begin{function}{\LocalLabelGet}
+%   \begin{syntax}
+%     \tn{LocalLabelGet} \oarg{identifier} \Arg{label}
+%   \end{syntax}
+%   Determine the complete name of the \meta{label} in the label
+%   section specified by \meta{identifier}. If no optional argument
+%   \meta{identifier} is provided, the current label section will be used.
+%   \begin{interfacenote}
+%     Internally the command is mapped to either \cs{locallabel_get_label:n}
+%     (no optional argument has been provide) or \cs{locallabel_get_label:nn}
+%     (with optional argument).
+%   \end{interfacenote}
+% \end{function}
+%
+% \begin{function}
+%   {
+%     \label,\dlabel,\ref,\dref,\pageref,\dpageref,
+%     \nameref,\dnameref,\autoref,\dautoref,
+%     \autopageref,\dautopageref
+%   }
+%   The commands \tn{d\meta{command}} are the original commands as found in
+%   |\begin{document}|. These are either commands from the \LaTeX{} core, from
+%   \pkg{hyperref}, \pkg{nameref} or other previously loaded packages that
+%   (re)define these commands. These original commands are redefined by
+%   \pkg{locallabel} so that all labels are first searched for in the current
+%   label section. If they are defined in it, the local labels are
+%   referenced. Otherwise, the label without a section is used.
+%
+%   As an example, this is a reference to \autoref{sec:latex2e} with number
+%   \ref{sec:latex2e} at \autopageref{sec:latex2e} with page number
+%   \pageref{sec:latex2e} and title ``\nameref{sec:latex2e}''.
+%
+%   In contrast, here we have a reference to German
+%   \dautoref{\LocalLabelGet[de]{sec:latex2e}} with number
+%   \dref{\LocalLabelGet[de]{sec:latex2e}} at
+%   \dautopageref{\LocalLabelGet[de]{sec:latex2e}} with page number
+%   \dpageref{\LocalLabelGet[de]{sec:latex2e}} and title
+%   ``\dnameref{\LocalLabelGet[de]{sec:latex2e}}'', each with the argument
+%   |\LocalLabelGet[de]{sec:latex2e}|, which expands to
+%   \texttt{\LocalLabelGet[de]{sec:latex2e}}.
+%
+%   The star variants provided by \pkg{hyperref} are also supported: here we
+%   have a reference to German \dautoref*{\LocalLabelGet[de]{sec:latex2e}}
+%   with number \dref*{\LocalLabelGet[de]{sec:latex2e}} at
+%   \dautopageref*{\LocalLabelGet[de]{sec:latex2e}} with page number
+%   \dpageref*{\LocalLabelGet[de]{sec:latex2e}} and title
+%   ``\dnameref*{\LocalLabelGet[de]{sec:latex2e}}''
+% \end{function}
+%
+%
+% ^^A Switch to ngerman and print the title
+% \selectlanguage{ngerman}
+% \LocalLabelStart{de}
+% \title{%
+%   \phantomsection^^A
+%   \addxcontentsline{toc}{part}{Das \pkg{locallabel} Paket}^^A
+%   \label{title}^^A
+%   Label Abschnitt mit dem \pkg{locallabel} Paket
+% }
+% \author{\href{mailto:komascript@gmx.info}{Markus Kohm}}
+% \date{Version \fileversion{} \filedate{}\thanks{Code und Fehlermeldungen
+%   unter \url{https://github.com/komascript/locallabel}.}}
+% \maketitle
+% \begin{abstract}
+%   Dieses Paket ist eine Verallgemeinerung der Möglichkeit der\KOMAScript{}
+%   Source Documentation Klassen, lokale Labels beispielsweise für Kapitel,
+%   Abschnitt oder Sprachen zu verwenden.
+% \end{abstract}
+% \hspace*{\fill}\hyperlink{title.en}{\textrightarrow~English}
+%^^A \tableofcontents
+%
+% \section[Die \LaTeX3-Schnittstelle]
+%  {Die \LaTeX3-Schnittstelle \LanguageMarker{sec:latex3}{English}}
+% \label{sec:latex3}
+%
+% Das \pkg{locallabel} Paket ist unter Verwendung von \LaTeX3 implementiert.
+% Daher verfügt es auch über eine native \LaTeX3-Schnittstelle. Diese kann
+% insbesondere von Klassen- und Paketautoren verwendet werden. Aus diesem
+% Grund benötigt das Paket aber auch mindestens \LaTeX{} 2020-10-01.
+%
+% Anwender, die über keine \LaTeX3-Kenntnisse verfügen oder sich aus anderem
+% Grund nicht für die \LaTeX3-Schnittstelle interessieren, können in
+% \autoref{sec:latex2e} ab \autopageref{sec:latex2e} direkt mit
+% "`\nameref{sec:latex2e}"' fortfahren.
+%
+% \begin{function}{\locallabel_init:,\locallabel_init:n}
+%   \begin{syntax}
+%     \cs{locallabel_init:}
+%     \cs{locallabel_init:n} \meta{clist}
+%   \end{syntax}
+%   Diese Funktion führt eine Neuinitialisierung des lokalen Label-Stacks
+%   durch. Die \meta{clist} stellt dabei eine Liste von Optionen
+%   dar. Unterstützt wird derzeit:
+%   \begin{description}
+%   \item[\texttt{push=\meta{string}}:] Lege bereits \meta{string} auf the
+%     Label-Stack.
+%   \end{description}
+%   Der leere Label-Stack stellt eine Art Haupt- oder General-Bereich dar, der
+%   immer dann referenziert wird, wenn ein lokales Label nicht definiert ist.
+% \end{function}
+%
+% \begin{function}{\locallabel_push:n}
+%   \begin{syntax}
+%     \cs{locallabel_push:n} \meta{string}
+%   \end{syntax}
+%   Starte einen weiteren globalen Label-Abschnitt \meta{string}.
+% \end{function}
+%
+% \begin{function}{\locallabel_pop:,\locallabel_pop:N}
+%   \begin{syntax}
+%     \cs{locallabel_pop:}
+%     \cs{locallabel_pop:N} \meta{string}
+%   \end{syntax}
+%   Beende den aktuellen Label-Abschnitt. Bei \cs{locallabel_pop:N} wird der
+%   aktuelle vom Label-Stack genommene Label-Abschnitt in der String-Variable
+%   \meta{string} zurück gegeben.
+% \end{function}
+% 
+% \begin{function}
+%   {
+%     \locallabel_get_label:,
+%     \locallabel_get_label:n,\locallabel_get_label:nn,
+%   }
+%   \begin{syntax}
+%     \cs{locallabel_get_label:n} \meta{string_1}
+%     \cs{locallabel_get_label:nn} \meta{string_2} \meta{string_1}
+%   \end{syntax}
+%   Ermittle den vollen Namen von \meta{string_1} in einem gegebenen
+%   Label-Abschnitt \meta{string_2}. Die Funktionen
+%   \cs{locallabel_get_label:n} und \cs{locallabel_get_label:} verwenden den
+%   aktuellen Label-Abschnitt. Funktion \cs{locallabel_get_label:} liefert
+%   dabei lediglich den aktuellen Präfix.
+% \end{function}
+%
+% Alle weiteren Funktionen und Variablen sind intern und sollten nicht
+% verwendet werden!
+%
+% \section[Die \LaTeXe-Schnittstelle]
+%   {Die \LaTeXe-Schnittstelle \LanguageMarker{sec:latex2e}{English}}
+% \label{sec:latex2e}
+%
+% Neben der in \autoref{sec:latex3} ab \autopageref{sec:latex2e}
+% dokumentierten \LaTeX3-Schnittstelle, gibt es für normale Anwender und für
+% den Gebrauch innerhalb des Dokuments auch eine \LaTeXe-Schnittstelle. Diese
+% bildet Anwenderbefehle in der Regel auf entsprechende \LaTeX3-Funktionen ab.
+%
+% \begin{function}{\LocalLabelInit}
+%   \begin{syntax}
+%     \tn{LocalLabelInit} \oarg{Optionen}
+%   \end{syntax}
+%   Die Anweisung führt eine Neuinitialisierung des Label-System durch. Das
+%   optionale Argument ist dabei eine durch Komma separiert Liste von
+%   Einstellungen. Unterstützt wird derzeit:
+%   \begin{description}
+%   \item[\texttt{push=\meta{Kennung}}:] Starte unmittelbar einen neuen
+%     Label-Abschnitt \meta{Kennung} entsprechend
+%     \tn{LocalLabelStart}\Arg{Kennung}.
+%   \end{description}
+%   Es ist nicht verboten, innerhalb eines Label-Abschnitts das Label-System
+%   neu zu initialisieren. Jedoch wird davon abgeraten. Stattdessen sollte alle
+%   aktiven Label-Abschnitte zuerst mit \tn{LocalLabelStop} beendet werden.
+%   \begin{interfacenote}
+%     Die Anweisung wird intern auf \cs{locallabel_init:} (ohne optionales
+%     Argument) oder \cs{locallabel_init:n} (mit optionalem Argument)
+%     abgebildet.
+%   \end{interfacenote}
+% \end{function}
+%
+% \begin{function}{\LocalLabelStart,\LocalLabelStop}
+%   \begin{syntax}
+%     \tn{LocalLabelStart} \Arg{Kennung}
+%     $\vdots$
+%     \tn{LocalLabelStop}
+%   \end{syntax}
+%   Starte und beende den Label-Abschnitt \meta{Kennung}. Die Anweisungen
+%   wirken global, das heißt, dass ein in einer Gruppe oder Umgebung
+%   begonnener Label-Abschnitt nicht automatisch mit der Gruppe oder Umgebung
+%   endet. Umgekehrt kann ein außerhalb einer Gruppe oder Umgebung begonnener
+%   Label-Abschnitt innerhalb einer Gruppe oder Umgebung beendet werden.
+%   \begin{interfacenote}
+%     Dies sind die \LaTeX3-Funktionen \cs{locallabel_push:n} und
+%     \cs{locallabel_pop:}.
+%   \end{interfacenote}
+% \end{function}
+%
+% \begin{function}{\LocalLabelGet}
+%   \begin{syntax}
+%     \tn{LocalLabelGet} \oarg{Kennung} \Arg{Label}
+%   \end{syntax}
+%   Ermittle den vollen Namen von \meta{Label} im Label-Abschnitt \meta{Kennung}.
+%   Wurde keine \meta{Kennung} angegeben, wird im aktuellen Label-Abschnitt
+%   gesucht.
+%   \begin{interfacenote}
+%     Die Anweisung wird intern auf \cs{locallabel_get_label:n} (ohne
+%     optionales Argument) oder \cs{locallabel_get_label:nn} (mit optionalem
+%     Argument) abgebildet.
+%   \end{interfacenote}
+% \end{function}
+% 
+% \begin{function}
+%   {
+%     \label,\dlabel,\ref,\dref,\pageref,\dpageref,
+%     \nameref,\dnameref,\autoref,\dautoref,
+%     \autopageref,\dautopageref
+%   }
+%   Bei den Anweisungen \tn{d\meta{Anweisung}} handelt sich um die
+%   Originalanweisungen, wie sie bei |\begin{document}| aufgefunden
+%   werden. Das sind entweder Anweisungen aus dem \LaTeX-Kern, von
+%   \pkg{hyperref}, \pkg{nameref} oder anderen zuvor geladenen Paketen, die
+%   diese Anweisungen (um)definieren.
+%
+%   Diese Originalanweisungen werden von \pkg{locallabel} so umdefiniert, dass
+%   alle Label zunächst im aktuellen Label-Abschnitt gesucht werden. Sind sie
+%   darin definiert, werden die lokalen Labels referenziert. Anderenfalls wird
+%   das Label ohne Abschnitt verwendet.
+%
+%   Als Beispiel ist das ein Verweise auf \autoref{sec:latex2e} mit Nummer
+%   \ref{sec:latex2e} auf \autopageref{sec:latex2e} mit der Seitenzahl
+%   \pageref{sec:latex2e} und dem Titel "`\nameref{sec:latex2e}"' unter
+%   Verwendung der Anweisungen \tn{autoref}, \tn{ref}, \tn{autopageref},
+%   \tn{pageref} und \tn{nameref}, jeweils mit dem Argument |sec:latex2e|.
+%
+%   Dagegen haben wir hier einen Verweise auf den englischen
+%   \dautoref{\LocalLabelGet[en]{sec:latex2e}} mit Nummer
+%   \dref{\LocalLabelGet[en]{sec:latex2e}} auf \typeout{TRACE: JETZT!}%
+%   \dautopageref{\LocalLabelGet[en]{sec:latex2e}}\typeout{:ECART} mit der Seitenzahl
+%   \dpageref{\LocalLabelGet[en]{sec:latex2e}} und dem Titel
+%   "`\dnameref{\LocalLabelGet[en]{sec:latex2e}}"'. Dazu wurden die Anweisungen
+%   \tn{dautoref}, \tn{dref}, \tn{dautopageref}, \tn{dpageref}, \tn{dnameref},
+%   jeweils mit dem Argument |\LocalLabelGet[en]{sec:latex2e}|, das zu
+%   \texttt{\LocalLabelGet[en]{sec:latex2e}} expandiert, verwendet.
+%
+%   Die von \pkg{hyperref} bereitgestellten Sternvarianten werden ebenfalls
+%   unterstützt: Hier einen Verweise auf den englischen
+%   \dautoref*{\LocalLabelGet[en]{sec:latex2e}} mit Nummer
+%   \dref*{\LocalLabelGet[en]{sec:latex2e}} auf
+%   \dautopageref*{\LocalLabelGet[en]{sec:latex2e}} mit der Seitenzahl
+%   \dpageref*{\LocalLabelGet[en]{sec:latex2e}} und dem Titel
+%   "`\dnameref*{\LocalLabelGet[en]{sec:latex2e}}"'.
+% \end{function}
+%
+% \LocalLabelStop
+% 
+%^^A Switch back to main language for the implementation
+%
+% \selectlanguage{english}
+% \bookmarksetup{startatroot}
+% \end{documentation}
+%
+%\iffalse meta-comment
+%<*sty>
+%\fi^^A meta-comment
+%
+% \begin{implementation}
+% \cleardoublepage
+% \addpart{Implementation}
+%
+% \begin{variable}[int]{\c_@@_separator_str}
+%   This is the string added between the elements of the label stack.
+%    \begin{macrocode}
+\str_const:Nn \c_@@_separator_str { + }
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}[int]{\c_@@_final_str}
+%   This string is added between the elements of the label stack and the
+%   label.
+%    \begin{macrocode}
+\str_const:Nn \c_@@_final_str { ++ }
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{variable}[int]{\g_@@_stack_clist}
+%   This is the label stack.
+%    \begin{macrocode}
+\clist_new:N \g_@@_stack_clist
+%    \end{macrocode}
+% \end{variable}
+%
+% \begin{macro}{\locallabel_init:n,\locallabel_init:,\LocalLabelInit}
+%   We use the following keys for the optional argument:
+%    \begin{macrocode}
+\keys_define:nn { locallabel / init }
+  {
+    push .code:n           = \locallabel_push:n { #1 },
+    push .value_required:n = true
+  }
+%    \end{macrocode}
+%   And now we initialize the stack and optionally add a new label section.
+%   Note: Initializing an not empty stack is not an error, but results in a
+%   warning.
+%    \begin{macrocode}
+\msg_new:nnn { locallabel } { stack abort }
+  {
+    Initialization~of~a~not~empty~label~stack.\\
+    Note:~This~is~valid~but~nevertheless~not~recommended.~
+    Instead~it~is~recommended~to~end~all~label~sections~either~using~the~
+    l3~function~\locallabel_pop:~or~the~user~command~\LocalLabelStop.
+  }
+\cs_new:Npn \locallabel_init:
+  {
+    \clist_if_empty:NF \g_@@_stack_clist
+      {
+        \msg_warn:nn { locallabel } { stack abort }
+      }
+      \clist_gclear:N \g_@@_stack_clist
+  }
+\cs_new:Nn \locallabel_init:n
+  {  
+    \locallabel_init:
+    \keys_set:nn { locallabel / init } { #1 }
+  }
+
+\NewDocumentCommand { \LocalLabelInit } { o }
+  {
+    \IfValueTF { #1 } { \locallabel_init:n { #1 } } { \locallabel_init: }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\locallabel_push:n,\LocalLabelStart}
+%   \begin{arguments}
+%   \item \meta{string} (in case of \tn{LocalLabelStart} optional) to be
+%     pushed to the label stack.
+%   \end{arguments}
+%   The argument must not be empty. The push is always global!
+%    \begin{macrocode}
+\msg_new:nnnn { locallabel } { empty section }
+  { label~section~must~not~be~empty }
+  {
+    Only~not~empty~label~sections~are~supported.~
+    So~using~\exp_not:N \locallabel_push:n{}~and~\LocalLabelStart{}~
+    are~not~allowed.
+  }
+\cs_new:Nn \locallabel_push:n
+  {
+    \tl_if_blank:nTF { #1 }
+      {
+        \msg_error:nn { locallabel } { empty section }
+      }
+      {
+        \clist_put_left:Ne \g_@@_stack_clist { \tl_to_str:n { #1 } }
+      }
+  }
+
+\NewDocumentCommand { \LocalLabelStart } { m } { \locallabel_push:n { #1 } }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\locallabel_pop:,\locallabel_pop:N,\LocalLabelStop}
+%    \begin{macrocode}
+\msg_new:nnnn { locallabel } { empty stack }
+  { cannot~pop~empty~label~stack }
+  {
+    The~label~stack~is~empty~\msg_line_context:,~
+    therefore~\exp_not:N \locallabel_pop:~are~\LocalLabelStop~are~currently~
+    forbidden.
+  }
+\cs_new:Nn \locallabel_pop:N
+  {
+    \clist_gpop:NNF \g_@@_stack_clist #1
+      {
+        \msg_error:nn { locallabel } { empty stack }
+      }
+  }
+\cs_new:Npn \locallabel_pop:
+  {
+    \locallabel_pop:N \l_tmpa_tl
+  }
+
+\NewDocumentCommand { \LocalLabelStop } { } { \locallabel_pop: }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[EXP]
+%   {
+%     \locallabel_get_label:,
+%     \locallabel_get_label:n,
+%     \locallabel_get_label:nn,
+%     \LocalLabelGet
+%   }
+%    \begin{macrocode}
+\cs_new:Npn \locallabel_get_label:
+  {
+    \clist_if_empty:NF \g_@@_stack_clist
+      {
+        \clist_use:Nn \g_@@_stack_clist \c_@@_separator_str
+        \c_@@_final_str
+      }
+  }
+
+\cs_new:Nn \locallabel_get_label:n
+  {
+    \cs_if_exist:cT { r @ \locallabel_get_label: #1 }
+      { \locallabel_get_label: }
+    #1
+  }
+
+\cs_new:Nn \locallabel_get_label:nn
+  {
+    \tl_if_blank:nF { #1 }
+      {
+        \cs_if_exist:cT { r @ #1 \c_@@_final_str #2 }
+          { #1 \c_@@_final_str }
+      }
+    #2
+  }
+
+\NewExpandableDocumentCommand { \LocalLabelGet } { o m }
+  {
+    \IfValueTF { #1 }
+      { \locallabel_get_label:nn { #1 } { #2 } }
+      { \locallabel_get_label:n { #2 } }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}
+%   {
+%     \label,\dlabel,\ref,\dref,\pageref,\dpageref,
+%     \nameref,\dnameref,\autoref,\dautoref,
+%   }
+%   We store the original definition of several label commands as
+%   \tn{d\meta{original name}} (the |d| means \emph{direct}). The names of the
+%   original commands are then used for the new commands with local 
+%   referencing.
+%    \begin{macrocode}
+\AddToHook { begindocument / end }
+  {  
+    \NewCommandCopy     \dlabel       \label
+    \DeclareCommandCopy \label        \@@_label:w
+    \NewCommandCopy     \dref         \ref
+    \DeclareCommandCopy \ref          \@@_ref:Nw
+    \NewCommandCopy     \dpageref     \pageref
+    \DeclareCommandCopy \pageref      \@@_pageref:Nw
+    \NewCommandCopy     \dnameref     \nameref
+    \DeclareCommandCopy \nameref      \@@_nameref:Nw
+    \NewCommandCopy     \dautoref     \autoref
+    \DeclareCommandCopy \autoref      \@@_autoref:Nw
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[int]{\@@_label:w}
+% This is the most simple of the new commands. It just prefixes the label
+% argument. So we can define it directly
+%    \begin{macrocode}
+\NewDocumentCommand \@@_label:w { m }
+  {
+    \exp_args:Ne \dlabel
+      {
+        \locallabel_get_label: \exp_not:n { #1 }
+      }
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}[int]
+%   {
+%     \@@_do_with_starvariant:Nw,
+%     \@@_ref:Nw,\@@_pageref:Nw,
+%     \@@_nameref:Nw,\@@_autoref:Nw,\@@_autopageref:Nw,
+%   }
+%    \begin{macrocode}
+\NewDocumentCommand { \@@_do_with_starvariant:Nw } { m s m }
+  {
+    \IfBooleanTF { #2 }
+      {
+        \exp_args:NNe #1 * { \locallabel_get_label:n { #3 } }
+      }
+      {
+        \exp_args:Ne #1 { \locallabel_get_label:n { #3 } }
+      }
+  }
+\cs_new:Npn \@@_ref:Nw         { \@@_do_with_starvariant:Nw \dref         }
+\cs_new:Npn \@@_pageref:Nw     { \@@_do_with_starvariant:Nw \dpageref     }
+\cs_new:Npn \@@_nameref:Nw     { \@@_do_with_starvariant:Nw \dnameref     }
+\cs_new:Npn \@@_autoref:Nw     { \@@_do_with_starvariant:Nw \dautoref     }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\dautopageref}
+%   This one is different, because \pkg{hyperref} implements \tn{autopageref}
+%   using \tn{pageref} internally. But we need to replace it by \tn{dpageref}.
+%    \begin{macrocode}
+\NewDocumentCommand { \dautopageref } { s m }
+  {
+    \DeclareCommandCopy \pageref \dpageref
+    \IfBooleanTF { #1 } { \autopageref* } { \autopageref } { #2 }
+    \DeclareCommandCopy \pageref \@@_pageref:Nw
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \end{implementation}
+% 
+%
+%\iffalse meta-comment
+%</sty>
+%\fi
+%
+%^^A Don't use \Finale, because we want the changes before the index.
+% \bookmarksetup{startatroot}
+% \printbibliography
+% \PrintChanges
+% \PrintIndex
+%
+% \endinput
+% Local Variables:
+% ispell-local-dictionary: "en_US"
+% eval: (flyspell-mode 1)
+% mode: doctex
+% TeX-master: t
+% End:
