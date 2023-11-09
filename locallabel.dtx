@@ -37,7 +37,7 @@
 %<+drv>\ProvidesNotExplFile{locallabel.drv}
 %<+sty>\ProvidesExplPackage{locallabel}
 %<+ins>\ProvidesNotExplFile{locallabel.ins}
-{2023-11-07}{0.1}{local label support}
+{2023-11-09}{0.1}{local label support}
 %<*dtx>
 \ifx\documentclass\undefined
 %</dtx>
@@ -52,7 +52,7 @@
 %      \from{locallabel.dtx}{ins}%
 %    }
     \file{locallabel.sty}{%
-      \from{locallabel.dtx}{sty,trace}%
+      \from{locallabel.dtx}{sty}%
     }%
   }
 %</ins>
@@ -71,17 +71,17 @@
 \AddToHook{package/hyperref/before}
   {\RequirePackage[ngerman,english]{babel}}
 \documentclass[show-notes]{l3doc}
-\usepackage{csquotes}
-\usepackage[style=alphabetic]{biblatex}
 \usepackage{locallabel}
 \AfterCalculatingTypearea{%
   \advance\marginparwidth by .5\dimexpr \oddsidemargin+1in\relax
   \advance\oddsidemargin by  .5\dimexpr \oddsidemargin+1in\relax
 }
 \recalctypearea
+\DeclareTOCStyleEntry[beforeskip=.25\baselineskip]{section}{section}
+\DeclareTOCStyleEntry[beforeskip=\baselineskip]{part}{part}
 \hypersetup{%
   pdfauthor = Markus Kohm,
-  pdftitle  = The LaTeX Package Documentation Package “locallabel”
+  pdftitle  = The “locallabel” Package
 }
 \makeatletter
 \NewDocumentCommand{\LanguageMarker}{omO{0pt}m}{%
@@ -327,7 +327,7 @@
 %   Source Documentation Klassen, lokale Labels beispielsweise für Kapitel,
 %   Abschnitt oder Sprachen zu verwenden.
 % \end{abstract}
-% \hspace*{\fill}\hyperlink{title.en}{\textrightarrow~English}
+% \LanguageMarker[en]{title}{English}
 %^^A \tableofcontents
 %
 % \section[Die \LaTeX3-Schnittstelle]
@@ -448,9 +448,9 @@
 %   \begin{syntax}
 %     \tn{LocalLabelGet} \oarg{Kennung} \Arg{Label}
 %   \end{syntax}
-%   Ermittle den vollen Namen von \meta{Label} im Label-Abschnitt \meta{Kennung}.
-%   Wurde keine \meta{Kennung} angegeben, wird im aktuellen Label-Abschnitt
-%   gesucht.
+%   Ermittle den vollen Namen von \meta{Label} im Label-Abschnitt
+%   \meta{Kennung}.  Wurde keine \meta{Kennung} angegeben, wird im aktuellen
+%   Label-Abschnitt gesucht.
 %   \begin{interfacenote}
 %     Die Anweisung wird intern auf \cs{locallabel_get_label:n} (ohne
 %     optionales Argument) oder \cs{locallabel_get_label:nn} (mit optionalem
@@ -483,8 +483,8 @@
 %
 %   Dagegen haben wir hier einen Verweise auf den englischen
 %   \dautoref{\LocalLabelGet[en]{sec:latex2e}} mit Nummer
-%   \dref{\LocalLabelGet[en]{sec:latex2e}} auf \typeout{TRACE: JETZT!}%
-%   \dautopageref{\LocalLabelGet[en]{sec:latex2e}}\typeout{:ECART} mit der Seitenzahl
+%   \dref{\LocalLabelGet[en]{sec:latex2e}} auf
+%   \dautopageref{\LocalLabelGet[en]{sec:latex2e}} mit der Seitenzahl
 %   \dpageref{\LocalLabelGet[en]{sec:latex2e}} und dem Titel
 %   "`\dnameref{\LocalLabelGet[en]{sec:latex2e}}"'. Dazu wurden die Anweisungen
 %   \tn{dautoref}, \tn{dref}, \tn{dautopageref}, \tn{dpageref}, \tn{dnameref},
@@ -762,7 +762,6 @@
 %
 %^^A Don't use \Finale, because we want the changes before the index.
 % \bookmarksetup{startatroot}
-% \printbibliography
 % \PrintChanges
 % \PrintIndex
 %

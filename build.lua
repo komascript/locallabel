@@ -7,7 +7,7 @@
   This file is part of the build system of locallabel.
 ]]
 
-release_info = "2023-11-07 v0.1"
+release_info = "2023-11-09 v0.1"
 -- Bundle and modules
 
 module       = "locallabel"
@@ -16,7 +16,7 @@ unpackfiles  = { "*.dtx" }
 
 -- Typesetting
 
-typesetruns  = 3
+typesetruns  = 4
 
 -- Detail how to set the version automatically
 -- Example: `l3build tag --date 2023-10-10 v0.0.1'
@@ -32,8 +32,8 @@ function update_tag (file,content,tagname,tagdate)
                           "{" .. tagdate .. "}{" .. tagname .. "}" )
    elseif string.match (file, "%.md$") then
       return string.gsub (content,
-                          "\nRelease: %d%d%d%d%-%d%d%-%d%d v[%d%.]*%d+  \n",
-                          "\nRelease: " .. tagdate .. " v" .. tagname .. "  \n")
+                          "\nRelease: %d%d%d%d%-%d%d%-%d%d v[%d%.]*%d+",
+                          "\nRelease: " .. tagdate .. " v" .. tagname )
    elseif string.match (file, "%.lua$") then
       return string.gsub (content,
                           '\nrelease_info%s*=%s*"%d%d%d%d%-%d%d%-%d%d%s*v[%d%.]*%d+"%s*\n',
