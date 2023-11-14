@@ -1,7 +1,7 @@
 #!/usr/bin/env texlua
 
 --[[
-  Build script for LaTeX class locallabel.
+  Build script for LaTeX package locallabel.
   Copyright (c) 2023 Markus Kohm
 
   This file is part of the build system of locallabel.
